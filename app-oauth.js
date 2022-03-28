@@ -7,10 +7,19 @@ config();
 // For development purposes only
 const tempDB = new Map();
 
+const slackRootUrl = 'https://dev.slack.com';
+const authUrl = `${slackRootUrl}/oauth/v2/authorize`;
+const clientOptions = {
+  slackApiUrl: `${slackRootUrl}/api/`,
+};
+
 const app = new App({
   logLevel: LogLevel.DEBUG,
+
+  // oauth and installer options
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
+  // clientOptions,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: 'my-state-secret',
   scopes: ['channels:history', 'chat:write', 'commands'],
@@ -53,7 +62,13 @@ const app = new App({
     // If true, /slack/install redirects installers to the Slack Authorize URL
     // without rendering the web page with "Add to Slack" button
     directInstall: false,
+    // authorizationUrl: authUrl,
+    // clientOptions,
   },
+
+  // Allow socket mode for local development
+  appToken: process.env.SLACK_APP_TOKEN,
+  socketMode: true,
 });
 
 /** Register Listeners */
