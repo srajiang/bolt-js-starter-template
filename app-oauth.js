@@ -1,6 +1,5 @@
 const { App, LogLevel } = require('@slack/bolt');
 const { config } = require('dotenv');
-const { registerListeners } = require('./listeners');
 
 config();
 
@@ -19,7 +18,7 @@ const app = new App({
   // oauth and installer options
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   clientId: process.env.SLACK_CLIENT_ID,
-  // clientOptions,
+  clientOptions,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   stateSecret: 'my-state-secret',
   scopes: ['channels:history', 'chat:write', 'commands'],
@@ -62,8 +61,8 @@ const app = new App({
     // If true, /slack/install redirects installers to the Slack Authorize URL
     // without rendering the web page with "Add to Slack" button
     directInstall: false,
-    // authorizationUrl: authUrl,
-    // clientOptions,
+    authorizationUrl: authUrl,
+    clientOptions,
   },
 
   // Allow socket mode for local development
@@ -71,8 +70,6 @@ const app = new App({
   socketMode: true,
 });
 
-/** Register Listeners */
-registerListeners(app);
 
 /** Start Bolt App */
 (async () => {
